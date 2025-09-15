@@ -8,5 +8,6 @@ couple of second you will see so many avialable dish on display.
 you can select which you want view steps to cook .
 within a couple of minutes we ready with our dishes.
 if you like the dish ,you prepared by you taken from list you can mark it as a fav,for future help.
+this is example project for understanding purpose.
 thank you 
 i will update it later some time .
