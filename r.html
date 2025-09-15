@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title> Kitchen Buddy </title>
+  <link rel="stylesheet" href="rec.css">
+  <!--<style>
+    :root{ --bg:#0f1724; --card:#0b1220; --accent:#ff7a59; --muted:#9aa4b2; --glass: rgba(255,255,255,0.03); }
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#2765d8 0%, #d5d7dd 100%);color:#e6eef6}
+    .wrap{max-width:1100px;margin:32px auto;padding:24px}
+
+    header{display:flex;gap:16px;align-items:center}
+    header h1{margin:0;font-size:20px}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:20px;margin-top:20px}
+
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6);}
+
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+    .input, textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{background:var(--glass);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+    .chip button{background:none;border:0;color:var(--muted);cursor:pointer}
+
+    .row{display:flex;gap:10px;align-items:center}
+    .small{font-size:13px;color:var(--muted)}
+
+    .btn{background:linear-gradient(90deg,var(--accent),#ff9b7a);border:0;padding:10px 14px;border-radius:10px;color:#071021;font-weight:700;cursor:pointer}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    .results{display:grid;gap:12px}
+    .recipe{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)}
+    .thumb{width:92px;height:72px;border-radius:8px;background:#072033;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+    .meta{flex:1}
+    .meta h3{margin:0;font-size:16px}
+    .meta p{margin:4px 0 0 0;font-size:13px;color:var(--muted)}
+    .tag{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);color:var(--muted)}
+
+    .empty{padding:24px;text-align:center;color:var(--muted)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.9));padding:24px}
+    .modal.open{display:flex}
+    .modal-card{max-width:880px;width:100%;background:var(--card);padding:18px;border-radius:12px}
+    .modal-card h2{margin:0 0 8px 0}
+    .steps{margin-top:12px;color:var(--muted);font-size:14px}
+
+    @media (max-width:880px){.grid{grid-template-columns:1fr;}.wrap{padding:12px}}
+  </style-->
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1> ***Kitchen Buddy*** <br>    <S><i>"(BEST BUDDY)"</i></S></h1>
+        <p style="color:black">Tell <b>TAYLOR</b> what's in the kitchen and how much time or mood he has — I'll suggest recipes.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <aside class="panel">
+        <label for="ingredients">Ingredients (type and press Enter or comma)</label>
+        <input id="ingredientInput" class="input" placeholder="eg. tomato, egg, rice" />
+        <div class="chips" id="chips"></div>
+
+        <div style="height:12px"></div>
+        <label>Max cook time</label>
+        <div class="row">
+          <select id="timeSelect" class="input" style="max-width:180px">
+            <option value="10">10 minutes</option>
+            <option value="20">20 minutes</option>
+            <option value="30" selected>30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+          <div style="flex:1"></div>
+          <button id="quickBtn" class="ghost">Quick ideas</button>
+        </div>
+
+        <div style="height:12px"></div>
+        <label>Mood / What <b>TAYLOR</b> is in the mood for</label>
+        <select id="mood" class="input">
+          <option value="any">Any</option>
+          <option value="comfort">Comforting</option>
+          <option value="quick">Quick & Easy</option>
+          <option value="healthy">Healthy</option>
+          <option value="indulgent">Indulgent</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="snack">Snack</option>
+        </select>
+
+        <div style="height:12px"></div>
+        <label>Dietary / Preferences</label>
+        <div class="row" style="margin-top:8px">
+          <label class="small"><input type="checkbox" id="veg" /> Vegetarian</label>
+          <label class="small"><input type="checkbox" id="vegan" /> Vegan</label>
+          <label class="small"><input type="checkbox" id="gf" /> Gluten-free</label>
+        </div>
+
+        <div style="height:12px"></div>
+        <label>Exclude ingredients (optional)</label>
+        <input id="exclude" class="input" placeholder="eg. peanuts, onion" />
+
+        <div style="height:14px"></div>
+        <div class="row">
+          <button id="suggest" class="btn">Suggest recipes</button>
+          <button id="random" class="ghost">Surprise TAYLOR</button>
+        </div>
+
+        <div style="height:8px"></div>
+        <div class="row" style="align-items:center;gap:8px;margin-top:8px">
+          <label class="small">Favorites</label>
+          <div id="favCount" class="tag">0</div>
+        </div>
+
+        <footer>
+          Tip: Add ingredients and press Enter. Use "Surprise 🎉 <b>TAYLOR</b>" when you're indecisive.
+        </footer>
+      </aside>
+
+      <main>
+        <section class="panel">
+          <div style="display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-bottom:8px">
+            <h2>Results</h2>
+            <div class="small" id="matchInfo">—</div>
+          </div>
+
+          <div id="results" class="results">
+            <div class="empty">Add ingredients and press "Suggest recipes" to see ideas.</div>
+          </div>
+        </section>
+
+        <section < style="margin-top:12px" class="panel">
+          <h3 style="margin:0 0 8px 0">Saved Favorites❤</h3>
+          <div id="favoritesList" class="results"><div class="small" style="color:black">No favorites yet.</div></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <button id="closeModal" class="ghost" style="float:right">Close</button>
+      <h2 id="modalTitle">Recipe</h2>
+      <div id="modalMeta" class="small" style="margin-top:6px"></div>
+      <div id="modalDesc" style="margin-top:12px"></div>
+      <div id="modalSteps" class="steps"></div>
+    </div>
+  </div>
+
+  <script>
+    // sample recipe database
+    const RECIPES = [
+      {
+        id:1, title:'Tomato Egg Stir-fry', time:10, mood:['quick','comfort','breakfast'], vegetarian:true, vegan:false, gf:true,
+        ingredients:['tomato','egg','oil','salt','pepper','onion'],
+        desc:'A classic quick stir-fry: tangy tomato with soft scrambled egg. Ready in 10 minutes.',
+        steps:['Whisk eggs with salt.','Sauté onion, add tomato until soft.','Pour eggs and scramble until set.','Serve hot with toast or rice.']
+      },
+      {
+        id:2,title:'Chickpea Salad',time:15,mood:['healthy','quick'],vegetarian:true,vegan:true,gf:true,
+        ingredients:['chickpeas','cucumber','tomato','lemon','olive oil','salt','pepper','coriander'],
+        desc:'Protein-packed salad. Toss and eat. Great for light dinners.',
+        steps:['Rinse chickpeas.','Chop vegetables.','Toss with lemon, oil, salt and herbs.']
+      },
+      {
+        id:3,title:'One-pot Vegetable Pulao',time:35,mood:['comfort'],vegetarian:true,vegan:true,gf:false,
+        ingredients:['rice','mixed vegetables','onion','garlic','spices','oil','salt'],
+        desc:'A fragrant one-pot rice dish using common veggies.',
+        steps:['Sauté onion and spices.','Add vegetables and rice.','Pour water and cook until rice is done.']
+      },
+      {
+        id:4,title:'Quick Masala Omelette',time:8,mood:['quick','breakfast'],vegetarian:true,vegan:false,gf:true,
+        ingredients:['egg','tomato','onion','green chili','coriander','salt','pepper'],
+        desc:'Spiced omelette for a speedy breakfast.',
+        steps:['Beat eggs, mix veggies.','Pour in pan and cook both sides.','Serve with bread.']
+      },
+      {id:5,title:'Peanut Butter Banana Toast',time:5,mood:['snack','indulgent'],vegetarian:true,vegan:true,gf:false,
+        ingredients:['bread','peanut butter','banana','honey'],desc:'Sweet snack, ready in minutes.',steps:['Toast bread.','Spread peanut butter, top with banana and honey.']},
+      {id:6,title:'Paneer Butter Masala',time:45,mood:['indulgent','comfort'],vegetarian:true,vegan:false,gf:false,ingredients:['paneer','tomato','cream','butter','spices','onion'],desc:'Rich paneer curry for a treat.',steps:['Make tomato-onion gravy.','Add paneer and simmer.','Finish with cream.']}
+    ];
+
+    // elements
+    const ingredientInput = document.getElementById('ingredientInput');
+    const chips = document.getElementById('chips');
+    const timeSelect = document.getElementById('timeSelect');
+    const mood = document.getElementById('mood');
+    const veg = document.getElementById('veg');
+    const vegan = document.getElementById('vegan');
+    const gf = document.getElementById('gf');
+    const exclude = document.getElementById('exclude');
+    const suggest = document.getElementById('suggest');
+    const random = document.getElementById('random');
+    const results = document.getElementById('results');
+    const quickBtn = document.getElementById('quickBtn');
+    const matchInfo = document.getElementById('matchInfo');
+    const favCount = document.getElementById('favCount');
+    const favoritesList = document.getElementById('favoritesList');
+
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalSteps = document.getElementById('modalSteps');
+
+    // local state
+    let ingredients = [];
+    let favorites = JSON.parse(localStorage.getItem('kb_favs')||'[]');
+    renderFavs();
+
+    function tokenize(text){return text.split(/[,\n]+/).map(s=>s.trim().toLowerCase()).filter(Boolean)}
+
+    function addChip(text){const t=text.trim().toLowerCase();if(!t) return; if(!ingredients.includes(t)){ingredients.push(t);renderChips()}}
+    function removeChip(text){ingredients = ingredients.filter(x=>x!==text);renderChips()}
+    function renderChips(){chips.innerHTML='';ingredients.forEach(i=>{const el=document.createElement('div');el.className='chip';el.innerHTML=`${i} <button aria-label="remove" data-i="${i}">✕</button>`;chips.appendChild(el)});updateMatchInfo();localStorage.setItem('kb_ings',JSON.stringify(ingredients))}
+
+    chips.addEventListener('click',e=>{if(e.target.dataset.i){removeChip(e.target.dataset.i)}})
+
+    ingredientInput.addEventListener('keydown',e=>{
+      if(e.key==='Enter' || e.key===','){e.preventDefault();const val=ingredientInput.value.trim(); if(val){val.split(',').forEach(v=>addChip(v)); ingredientInput.value=''}}
+    })
+
+    quickBtn.addEventListener('click',()=>{timeSelect.value='20';mood.value='quick';veg.checked=false;vegan.checked=false;gf.checked=false;suggest.click()})
+
+    suggest.addEventListener('click',()=>{const excl=tokenize(exclude.value);const maxT=parseInt(timeSelect.value);const moodVal=mood.value;const filters={veg:veg.checked,vegan:vegan.checked,gf:gf.checked,exclude:excl,mood:moodVal,maxT:maxT};const matches=findMatches(ingredients,filters);renderResults(matches)})
+
+    random.addEventListener('click',()=>{const r = RECIPES[Math.floor(Math.random()*RECIPES.length)];showModal(r)})
+
+    function findMatches(ings,filters){
+      function score(recipe){
+        const recipeIngs = recipe.ingredients.map(i=>i.toLowerCase());
+        const matchCount = ings.filter(i=>recipeIngs.includes(i)).length;
+        const missing = recipeIngs.length - matchCount;
+        let score = (matchCount/recipeIngs.length);
+        // prefer shorter cook time relative to allowed time
+        if(recipe.time <= filters.maxT) score += 0.15;
+        // mood boost
+        if(filters.mood!=='any' && recipe.mood.includes(filters.mood)) score += 0.12;
+        // dietary checks
+        if(filters.veg && !recipe.vegetarian) return -1;
+        if(filters.vegan && !recipe.vegan) return -1;
+        if(filters.gf && !recipe.gf) return -1;
+        // exclude
+        for(const ex of filters.exclude){ if(recipeIngs.includes(ex)) return -1 }
+        return Math.max(0,score);
+      }
+      const scored = RECIPES.map(r=>({r,score:score(r)})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score);
+      return scored.map(s=>({...s.r,score:Math.round(s.score*100)}));
+    }
+
+    function renderResults(list){results.innerHTML='';if(!list.length){results.innerHTML='<div class="empty">No recipes match. Try removing filters or adding more ingredients.</div>';matchInfo.textContent='0 results';return}
+      matchInfo.textContent=`${list.length} result(s)`;
+      list.forEach(item=>{
+        const el=document.createElement('div');el.className='recipe';
+        el.innerHTML = `<div class="thumb">${item.title.split(' ')[0]}</div>
+          <div class="meta">
+            <h3>${item.title} <span class="tag">${item.score}% match</span></h3>
+            <p>${item.desc}</p>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+              <div class="small">${item.time} min</div>
+              <div style="flex:1"></div>
+              <button class="ghost" data-open="${item.id}">View</button>
+              <button class="ghost" data-fav="${item.id}">❤</button>
+            </div>
+          </div>`;
+        results.appendChild(el);
+      })
+    }
+
+    results.addEventListener('click',e=>{
+      if(e.target.dataset.open){const id=Number(e.target.dataset.open);const r = RECIPES.find(x=>x.id===id); if(r) showModal(r)}
+      if(e.target.dataset.fav){const id=Number(e.target.dataset.fav);toggleFav(id)}
+    })
+
+    function showModal(recipe){modal.classList.add('open');modal.setAttribute('aria-hidden','false');modalTitle.textContent = recipe.title;modalMeta.textContent = `${recipe.time} min • ${recipe.mood.join(', ')}`;modalDesc.textContent = recipe.desc;modalSteps.innerHTML = `<ol>${recipe.steps.map(s=>`<li>${s}</li>`).join('')}</ol>`}
+    closeModal.addEventListener('click',()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true')})
+
+    function toggleFav(id){ if(favorites.includes(id)){favorites = favorites.filter(x=>x!==id)} else {favorites.push(id)} localStorage.setItem('kb_favs',JSON.stringify(favorites));renderFavs() }
+
+    function renderFavs(){favCount.textContent = String(favorites.length);favoritesList.innerHTML='';if(!favorites.length){favoritesList.innerHTML='<div class="small">No favorites yet.</div>';return}
+      favorites.forEach(id=>{const r=RECIPES.find(x=>x.id===id); if(!r) return; const el=document.createElement('div');el.className='recipe'; el.innerHTML = `<div class="thumb">${r.title.split(' ')[0]}</div><div class="meta"><h3>${r.title}</h3><p class="small">${r.time} min • ${r.mood.join(', ')}</p></div><div style="display:flex;align-items:center;gap:8px"><button class="ghost" data-open="${r.id}">View</button><button class="ghost" data-unfav="${r.id}">Remove</button></div>`; favoritesList.appendChild(el) })
+    }
+
+    favoritesList.addEventListener('click',e=>{if(e.target.dataset.open){const id=Number(e.target.dataset.open);showModal(RECIPES.find(x=>x.id===id))} if(e.target.dataset.unfav){const id=Number(e.target.dataset.unfav);favorites = favorites.filter(x=>x!==id);localStorage.setItem('kb_favs',JSON.stringify(favorites));renderFavs()}})
+
+    // load saved ingredients
+    try{const saved = JSON.parse(localStorage.getItem('kb_ings')||'[]'); if(Array.isArray(saved)){ingredients = saved; renderChips()}}catch(e){}
+
+    function updateMatchInfo(){matchInfo.textContent = ingredients.length ? `${ingredients.length} ingredient(s)` : '—'}
+
+    // little UX: pressing comma in exclude will split
+    exclude.addEventListener('keydown',e=>{if(e.key==='Enter' || e.key===','){e.preventDefault();suggest.click()}})
+
+    // keyboard quick add: paste CSV
+    ingredientInput.addEventListener('paste',e=>{setTimeout(()=>{const v=ingredientInput.value; if(v.includes(',')){v.split(',').forEach(x=>addChip(x)); ingredientInput.value=''}})})
+
+    // initial sample render
+    renderResults([]);
+  </script>
+</body>
+</html>
